@@ -1,0 +1,254 @@
+body {
+  /**background: url(../images/bg.jpg);**/
+  font: 14px HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  background: #202020;
+}
+
+h1, h2, h3 {
+  font-weight:200;
+  color:#eee;
+}
+
+.container {
+  width:1500px;
+  margin-left: 40px;
+}
+
+.header {
+  margin: 20px 0 20px -30px;
+  
+}
+
+.header h1 {
+  margin-top:5px;
+}
+
+i {
+  margin-right:10px;
+}
+
+.hide{
+  display: none;
+}
+
+.logo {
+  background: url(../img/logo.png) no-repeat;
+  background-size: 40px 50px;
+
+  float: left;
+  margin-right: 20px;
+  height:50px;
+  width:40px;
+}
+
+.playback-controlls {
+  background-color: #ddd;
+  color: #222;
+  font-size:25px;
+  margin-top: 15px;
+  padding: 0 0 0 10px;
+  border-radius: 40px;
+  width:30px;
+}
+
+#radio {
+  display:none;
+}
+
+.nav>li>a:hover{color:#222 !important;}
+.nav>li>a:hover em{color:#222 !important;}
+
+.album {
+  overflow: auto;
+  min-height: 200px;
+  width:143%;
+  border-bottom: solid 2px #ccc;
+  padding: 15px 0 15px 15px;
+}
+
+em {
+  font-weight: bold;
+
+}
+
+.songs{
+  float:left;
+  width:52%;
+}
+
+.album h4 {
+
+   text-shadow: 1px 1px 1px #222;
+   width:none;
+}
+
+.album h4 span {
+  
+  width:300px;
+  
+ 
+  line-height: 25px;
+  font-size: 15px;
+  text-shadow:none;
+  font-weight: 200;
+}
+
+.album h4 span i {
+  
+margin-left: 5px;
+  font-size: 14px !important;
+font-size:20px;
+}
+
+.popover-title {
+  color:#333;
+
+}
+
+li a i{
+  font-size:15px;
+  margin-left: 10px;
+
+}
+
+.context-button.hide{
+  visibility: hidden;
+}
+
+#now-playing {
+  color:#ccc;
+}
+
+#now-playing .title{
+  float:left;
+  width:150px;
+}
+
+#slider{
+  clear: both;
+  height:7px;
+  margin-top: 25px;
+}
+
+#slider a.ui-slider-handle {
+  margin-top: 2px;
+  height:10px;
+  width:10px;
+}
+
+#slider-container{
+  
+  float:left;
+  width:350px;
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+.song .popover-title{
+  display: none;
+}
+
+.context-button {
+  display: inline-block;
+  background: url(images/context.png);
+  background-size: 54px 18px;
+  background-position: -18px 0;
+  background-repeat: no-repeat;
+  margin-top: -2px;
+
+  margin-left: 5px;
+  margin-bottom: -4px;
+  line-height: 16px;
+
+  height:18px;
+  width: 18px;
+}
+
+.control-button {
+  background-repeat  : no-repeat;
+  background-position: 0 0;
+  cursor             : pointer;
+  display            : inline-block;
+  margin-top         : 10px; 
+  height             : 35px;
+  width              : 35px;
+}
+
+.control-button:hover {
+  background-position-x: -70px;
+}
+
+.play-button {
+  background: url(images/controls.png);
+  background-size: 105px 105px;
+  margin: 0 20px;
+}
+
+.pause-button {
+  background: url(images/controls.png);
+  background-size: 105px 105px;
+  background-position: 0 -35px;
+  margin: 0 20px;
+}
+
+.next-button {
+  background: url(images/next.png);
+  background-size: 105px 35px;
+}
+
+.prev-button {
+  background: url(images/prev.png);
+  background-size: 105px 35px;
+}
+
+.popover-content {
+  padding: 0 0;
+  margin: -1px -1px;
+}
+
+.add-next {
+  background: url(images/context_menu.png);
+  background-size: 40px 240px;
+  background-position: 0 -22px;
+  
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: -4px;
+  height:20px;
+  width:20px;
+}
+
+#up-next{
+  font-size: 20px;
+  width:100px;
+  height:20px;
+}
+
+#up-next.highlight{
+  color: green;
+
+}
+
+#up-next.larger{
+    font-size: 40px;
+}
+
+.play-next {
+  background: url(images/context_menu.png);
+  background-size: 40px 240px;
+  
+  
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: -4px;
+  height:20px;
+  width:20px;
+}
+
+
+.song-drag{
+  background-color: #eee;
+  color:#999;
+  font-size: 18px;
+  padding: 10px;
+}

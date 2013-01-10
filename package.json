@@ -1,0 +1,28 @@
+{
+  "name" : "pns",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "bunyan"          : "0.16.4",
+    "coffee-script"   : "*",
+    "nconf"           : "0.6.5",
+    "express"         : "*",
+    "express-resource": "*",
+    "connect-redis"   : "*",
+    "socket.io"       : "*",
+    "underscore"      : "*",
+    "hiredis"         : "*",
+    "redis"           : "*",
+    "apn"             : "*",
+    "node-gcm"        : "*",
+    "mpns"            : "*",
+    "wns"             : "*",
+    "kue"             : "*",
+    "jade"            : "*",
+    "bases"           : "*",
+    "inflection"      : "*"
+  }
+}
