@@ -1,31 +1,34 @@
 User = require("../models/user")
 
 exports.index = (req, res) ->
-  res.send "user index"
+  User.all (err, users)->
+    if err
+      res.json 500, 
+        error: err
+    else
+      res.json 
+        users: users
 
 exports.new = (req, res) ->
   res.send "new user"
   
 exports.create = (req, res) ->
-  console.log req.query.name
+
   console.log req.query
   a = new User(
     name: req.query.name
     applicationId: req.query.applicationId
   )
-  a.save(->
-    User.all()
-    )
+  a.save (err, user)->
+    
+
   res.send "create user"
 
 exports.show = (req, res) ->
-  console.log req.params
-
-  User.find(req.params.user, (err, user) ->
+  User.find req.params.user, (err, user) ->
     if user
-      res.json 200, (
-        user: user
-      )
+      res.json 200, user
+      
       user.messages  (err, messages) ->
         console.log messages
       user.application (err, application) ->
@@ -33,8 +36,6 @@ exports.show = (req, res) ->
 
     else
       res.send "user not found"
-  )
-
 
 exports.edit = (req, res) ->
   res.send "edit user " + req.params.user
@@ -51,4 +52,4 @@ exports.destroy = (req, res) ->
   )
   
   
-
+console.log exports

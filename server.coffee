@@ -52,6 +52,7 @@ app = express()
 
 app.configure ->
   app.set "port", process.env.PORT or 3000
+  app.use express.compress()
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.set "view engine", "jade"
@@ -135,6 +136,7 @@ io.configure ->
   io.set "transports", ["websocket", "htmlfile", "xhr-polling", "jsonp-polling"]
 
   io.set "store", new SocketRedisStore(
+    redis: require('socket.io/node_modules/redis')
     redisPub: pub
     redisSub: sub
     redisClient: store

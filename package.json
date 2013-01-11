@@ -23,6 +23,7 @@
     "kue"             : "*",
     "jade"            : "*",
     "bases"           : "*",
-    "inflection"      : "*"
+    "inflection"      : "*",
+    "benchmark"       : "*"
   }
 }

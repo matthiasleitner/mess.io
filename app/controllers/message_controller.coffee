@@ -8,12 +8,12 @@ exports.new = (req, res) ->
   
 exports.create = (req, res) ->
   
-  console.log req.query.name
   a = new Message(
     name: req.query.name
     applicationId: req.params.application
     userId: req.params.user
   )
+  
   a.save (err, reply) ->
     Application.all()
     

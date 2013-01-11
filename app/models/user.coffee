@@ -9,11 +9,6 @@ class User extends RedisObject
   # addDevice: (device, cb) ->
   #   super.client.SADD "devices_for_user|#{@id}", device.id, cb
 
-  # messages: (cb) ->
-  #   super.client.SMEMBERS "messages_for_user|#{@id}", cb
-
-  toString: ->
-    return "ID: #{@id} - #{@name} - #{@createdAt}"
-
 
 module.exports = User
+console.log module.exports
