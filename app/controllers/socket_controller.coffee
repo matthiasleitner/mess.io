@@ -9,7 +9,7 @@ class SocketController
       socket.broadcast.emit "socketList", io.sockets.manager.connected
       socket.on "socketList", (fn) ->
         fn(io.sockets.manager.connected)
-        console.log io.sockets.clients()[1].handshake
+        
 
       socket.on "register", (data) ->
         data.socketID = socket.id

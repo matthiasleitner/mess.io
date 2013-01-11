@@ -27,9 +27,9 @@ class RedisObject
           return result
          """
 
-  #redis.debug_mode = true;
   db = redis.createClient()
   klass = null
+
   constructor: (@obj) ->
     @id = obj.id
     klass = @constructor
@@ -40,8 +40,11 @@ class RedisObject
   #
   #
   delete: (cb) ->
-    console.log "delete user"
+    console.log "delete #{klass._name()} with id: #{@id}"
+
+    # delete actual object hash
     db.DEL @_dbKey(),(err, reply) =>  
+      # delete from class index
       db.ZREM klass._indexKey(), @id, cb
       
     @_removeAssociations()
@@ -49,17 +52,15 @@ class RedisObject
   # Persist object
   #
   #
-  save: (cb) ->
-    
+  save: (cb) ->    
+    # new object
     if @id == undefined
-
       @_nextId (id) =>
         @id = id
         @obj.createdAt = new Date()
 
         # once ID is fetched call save again 
         @save(cb)
-
     else
       @obj.updatedAt = new Date()
       
@@ -67,8 +68,7 @@ class RedisObject
         if !err
           @_afterCreate cb
         else
-          cb err, null
-          console.log err
+          cb err, null          
 
   toString: ->
     JSON.stringify(@obj)
@@ -93,7 +93,6 @@ class RedisObject
 
 
   @find: (id, cb) ->
-
     db.HGETALL @_dbKey(id), (err, obj) =>
       if obj
         obj.id = id
@@ -104,12 +103,18 @@ class RedisObject
   @count: (cb) ->
     db.get @_countKey(), cb
 
+  # Convert attributes of object to be stored as redis hash
+  #
+  #
   @stringifyAttributes: (obj) ->
     sObj = {}
     for k,v of obj      
       sObj[k] = "#{v}"
     sObj
 
+  # Generate random Base62 key
+  #
+  #
   @generateKey: (length = 32) ->
   
     maxNum = Math.pow(62, length)

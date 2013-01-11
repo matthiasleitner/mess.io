@@ -3,7 +3,7 @@ RedisObject = require("./redis_object")
 
 class User extends RedisObject
 
-  @hasMany: ["messages", "devices"]
+  @hasMany:   ["messages", "devices"]
   @belongsTo: ["application"]
   
   # addDevice: (device, cb) ->

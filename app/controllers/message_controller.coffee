@@ -12,12 +12,14 @@ exports.create = (req, res) ->
     name: req.query.name
     applicationId: req.params.application
     userId: req.params.user
+    payload: req.query.payload
+    scheduledFor: req.query.scheduledFor
   )
   
   a.save (err, reply) ->
-    Application.all()
+    res.send reply  
     
-  res.send "create message"
+  
 
 exports.show = (req, res) ->
   res.send "show message " + req.params.message + " " + req.params.user

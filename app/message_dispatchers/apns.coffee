@@ -11,12 +11,14 @@ class APNSDispatcher
     autoAdjustCache: true
     connectionTimeout: 0
 
-  constructor: (@message) ->
+  constructor: (@message, @device) ->
     @token = "6ee7b0493efd3157815eab98ab14b479be1f1c14b24e5f8bb64565eca688b719"
     console.log(options)
   dispatch: ->
     
+
     apnsConnection = new apns.Connection(options)
+
     apnsDevice = new apns.Device(@token)
 
     note = new apns.Notification()
@@ -24,6 +26,7 @@ class APNSDispatcher
     note.badge = 5
     note.alert = "it works perfect"
     note.payload = messageFrom: "Caroline"
+
     note.device = apnsDevice
 
     apnsConnection.sendNotification note

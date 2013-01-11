@@ -4,7 +4,9 @@
 ###
 
 path                = require('path')
-http                = require('http')
+https               = require("https")
+http                = require("http")
+fs                  = require("fs")
 express             = require('express')
 bunyan              = require('bunyan')
 coffeeScript        = require('coffee-script')
@@ -17,6 +19,12 @@ WebClientController = require('./app/controllers/web_client_controller')
 Resource            = require('express-resource')
 io                  = require('socket.io')
 User                = require('./app/models/user')
+MessageWorker       = require('./app/workers/message_worker')
+kue                 = require('kue')
+
+kue.app.listen(3001)
+
+
 
 ###
  Set config file
@@ -82,11 +90,18 @@ users        = app.resource 'users', require('./app/controllers/user_controller'
 
 webClientController = new WebClientController(app)
 
-console.log app.routes
+options =
+  key: fs.readFileSync "server.key"
+  cert: fs.readFileSync "server.crt"
 
 ###
  Start listening to port
 ###
+
+#https
+# server = https.createServer(options, app).listen app.get("port"), ->
+#   console.log "Express server listening on port " + app.get("port")
+
 server = http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
@@ -135,12 +150,18 @@ io.configure ->
 
   io.set "transports", ["websocket", "htmlfile", "xhr-polling", "jsonp-polling"]
 
-  io.set "store", new SocketRedisStore(
+  io.set "store", new SocketRedisStore
     redis: require('socket.io/node_modules/redis')
     redisPub: pub
     redisSub: sub
     redisClient: store
-  )
+  
 
 
 socketController = new SocketController(io)
+
+###
+ Kue process queue
+###
+
+messageWorker = new MessageWorker()
