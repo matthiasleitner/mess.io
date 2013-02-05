@@ -41,10 +41,15 @@ block content
                   ='applications/1/users/'
                   span#user_id
                   ='/messages?text=hello%20world"'
-
-          .badge.badge-info.clients
-          h3.left
-            ="active connections"
+          .span5
+            .badge.badge-info.clients
+            h3.left
+              ="active connections"
+          .span4
+            .badge.badge-info.messages
+              =messageCounter
+            h3.left
+              ="messages sent"
     .container
       .row
         footer

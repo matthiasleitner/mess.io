@@ -9,15 +9,16 @@ class MessageController extends ResourceController
   create: (req, res) ->
     params = req.params
     
+    # TODO: build param validation chain and also check for existing application
+    
     if req.param("text")
-
       User.find params.user, (err, user) =>
         if user
           a = new Message
             text: req.param("text")
             applicationId: req.params.application
             userId: user.id
-            payload: req.body("payload") #json payload
+            payload: req.body.payload
             scheduledFor: req.param("scheduledFor")
           
           a.save (err, reply) ->

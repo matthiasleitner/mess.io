@@ -25,6 +25,13 @@ push.on("userKey", function(data){
   $("#demo").fadeIn(250)
 })
 
-push.socket.on("connection_count", function(data){ $(".clients").text(data)});
+push.socket.on("sent_message_count", function(data){
+  console.log(data);
+  $(".messages").text(data)
+})
+
+push.socket.on("connection_count", function(data){ 
+  $(".clients").text(data)
+});
 
 

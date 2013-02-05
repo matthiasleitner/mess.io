@@ -5,7 +5,9 @@ crypto     = require("crypto")
 _          = require("underscore")
 Benchmark  = require('benchmark')
 
-
+# Class for handling persistence through redis
+#
+#
 class RedisObject
 
   # lua script used to fetch multiple instances of object
@@ -33,11 +35,15 @@ class RedisObject
 
   klass = null
 
+  # Constructor 
+  #
+  #
   constructor: (@obj) ->
     #assign shorthand for class methods
     klass = @constructor
 
-    #generate uniq key if defined
+    console.log "consturctor #{klass.name}"
+    # generate uniq key if defined
     if klass.hasUniqKey
       unless obj.key
         obj.key = klass.generateKey()

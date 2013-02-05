@@ -1,5 +1,13 @@
 apns = require('apns')
+
+# Class for sending messages via Apple Push Notification Service
+#
+#
 class APNSDispatcher
+
+  #
+  # TODO: load proper cert and key for given device
+  #
   options =
     certFile: "cert.pem"
     keyFile: "key.pem"

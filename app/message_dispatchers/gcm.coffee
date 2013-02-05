@@ -1,22 +1,26 @@
-
 gcm = require('node-gcm')
 
+# Class for sending messages via Google Cloud Messaging
+#
+#
 class GCMDispatcher
+
   constructor: (@app, @device, @retries = 4) ->
-    @gcmKey = "AIzaSyD4gy-ro9l-X9OfvfDH8EaaqGgjmyOWxW8"# app.gcmKey 
-    @gcmDeviceKey = @device.get("gcmToken")
+    # TODO: remove debug keys
+    @gcmKey = "AIzaSyD4gy-ro9l-X9OfvfDH8EaaqGgjmyOWxW8" # app.gcmProjectId 
     @gcmDeviceKey = "APA91bHz6yG8WOeEe33iB3s7HSz9nGM9xNc-r9QoG_1-bt2r4iTOceieXMjhZ2B1U6U3-4Nw8M4roxK6RwDOUtL8Yq_bauqL73yHR2wAUljfxDuqmLwtfFgV1OoLlXvs6iSPQnu5xlz2oyYai5HyTMEiCiLqgcYZUasokgdvPzYq_6t3MAkUMj0"
-    
+    #@gcmDeviceKey = @device.get("gcmToken")
+    @registrationIds = []
+
   dispatch: (message) ->
     gcmMessage = new gcm.Message()
     gcmSender = new gcm.Sender(@gcmKey)
 
-    registrationIds = []
 
     gcmMessage.addData "key1", "message1"
     gcmMessage.addData "message", message.get "text"
     
-    #message.data = @message.payload
+    #message.data = @message.get "payload"
     
     # Optional
 
@@ -34,7 +38,7 @@ class GCMDispatcher
     # time in seconds a message is kept in GCM storage if the device is offline - default is 4 weeks
     gcmMessage.timeToLive = 60 * 60 * 24 
 
-    # push registration ids 
+    # push devicekey to registration ids 
     registrationIds.push @gcmDeviceKey
 
     # Parameters: message instance, registrationIds array, number of retries, callback

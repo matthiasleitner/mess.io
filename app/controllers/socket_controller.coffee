@@ -1,5 +1,9 @@
 Device = require("../models/device")
 cookie = require('cookie')
+
+# Controller for WebSocket interaction
+#
+#
 class SocketController
 
   constructor: (@io) ->
@@ -51,20 +55,16 @@ class SocketController
         data.handshake = JSON.stringify(socket.handshake)
         data.ip = socket.handshake.address.address
 
-        socket.join "registedDevices"
+        socket.join "registeredDevices"
         
         Device.create data, (err, device) =>
-
           socket.emit "deviceKey", device.key
           socket.set "deviceId", device.id
   
-          console.log device.get("key")
-
           # send user key back to client for demo
           device.user (err, user) =>
             socket.emit "userKey", user.get "key"
    
-        
 
       socket.on "connect", (data) ->
         console.log data

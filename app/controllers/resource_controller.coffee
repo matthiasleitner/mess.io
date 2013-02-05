@@ -1,4 +1,8 @@
 _ = require("underscore")
+
+# Super class for a RESRful controller
+#
+#
 class ResourceController
   hierarchy = ["application", "user", "device", "message"]
   constructor: (@klass) ->
@@ -79,9 +83,6 @@ class ResourceController
       else 
         res.json 500
     
-  update: (req, res) ->
-    res.send "update user " + req.params.user
-
   destroy: (req, res) =>
     console.log req.params
     

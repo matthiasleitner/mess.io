@@ -1,13 +1,18 @@
+MessageCounter = require("../models/message_counter")
+
+# Class for sending messages via Socket.io / HTML5 Websockets
+#
+#
 class WebSocketDispatcher
   constructor: (@io, @device) ->
     token = device.get("webSocketToken")
     @socket = io.sockets.sockets[token]
   dispatch: (@message)->
-    
-    console.log @message.get "text"
     if @socket
-      console.log "send message to socket #{@message.get("text")}"
       @socket.send @message.get "text"
+
+    MessageCounter.value (err, value) =>
+      @io.sockets.in('registeredDevices').emit "sent_message_count", value
 
 
 module.exports = WebSocketDispatcher

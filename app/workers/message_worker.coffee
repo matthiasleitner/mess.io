@@ -4,8 +4,12 @@ APNSDispatcher = require("../message_dispatchers/apns")
 GCMDispatcher = require("../message_dispatchers/gcm")
 WebSocketDispatcher = require("../message_dispatchers/websockets")
 Message = require("../models/message")
+MessageCounter = require("../models/message_counter")
 Device = require("../models/device")
 
+# Class for processing queued jobs and init dispatching
+#
+#
 class MessageWorker
   klass = null
   constructor: (io, concurrency = 10) ->
@@ -25,6 +29,9 @@ class MessageWorker
   # static methods
   # ---------------------------------------------------------
 
+  # Queue new message
+  #
+  #
   @enqueue: (obj, cb) -> 
 
     obj.title = "message to user: #{obj.userId}"
@@ -43,10 +50,12 @@ class MessageWorker
     job.save (err) =>
       cb()
 
+  # Process queue message
+  #
+  #
   @_process: (job, done) ->
     # find message for job
     console.log job.data
-
 
     # find message 
     Message.find job.data, (err, message) =>
@@ -59,45 +68,55 @@ class MessageWorker
           # get all devices of user
           user.devices (err, devices) =>
             console.log devices
+            
             # serve all devices of user
             for device in devices
               device = new Device(device)
 
+              # browser clients
               if device.supportsChannel("webSocket")
                 console.log "send message to socket with token %s", device.get("webSocketToken")
                 socketDispatcher = new WebSocketDispatcher(klass.io, device)
                 socketDispatcher.dispatch(message)
+
+              # Android
               if device.supportsChannel("gcm")
                 gcmDispatcher = new GCMDispatcher(null, device)
                 gcmDispatcher.dispatch(message)
 
+              # iOS and OS X devices
               if device.supportsChannel("apns")
                 apnsDispatcher = new APNSDispatcher(device)
                 apnsDispatcher.dispatch(message)
 
             done()
 
+  # Completion handler - removes completed jobs
+  #
+  #
   @_completionHandler: (id) ->
-    kue.Job.get id, (err, job) ->
-      return if err
-      job.remove (err) ->
-        throw err if err
-        console.log "removed completed job #%d", job.id
-
+    MessageCounter.incr()
+    console.log "job with id: #{id} done"
+    MessageWorker._remove(id)
+    
+  # Handler for failed jobs
+  #
+  #
   @_failureHandler: (id) ->
-    console.log "job with id: #{id} failed!!!"
-
-    kue.Job.get id, (err, job) ->
-      throw err if err
-      job.state('inactive').save()
-      console.log job
-      
-      # 
+    console.log "job with id: #{id} failed!"
+    MessageWorker._restart(id)
+    
+  # Helper for restarting job with given id
+  #
+  #
   @_restart: (id) ->
     kue.Job.get id, (err, job) ->
       throw err if err
       job.state('inactive').save()
 
+  # Helper for removing jobs woth given id from queue
+  #
+  #
   @_remove: (id) ->
     kue.Job.get id, (err, job) ->
       throw err if err

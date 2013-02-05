@@ -6,6 +6,7 @@ class ApplicationController extends ResourceController
     super(Application)
   
   create: (req, res) ->
+    # check if files are provided
     req.body.apnsCert = req.files.apns_cert.path if req.files.apns_cert.size > 0
     req.body.apnsKey  = req.files.apns_key.path if req.files.apns_key.size > 0
     
@@ -13,6 +14,8 @@ class ApplicationController extends ResourceController
     console.log req.query
     console.log req.files
 
+
+    # create new application from req.body
     app = new Application(req.body)
 
     app.save (err, app) ->
