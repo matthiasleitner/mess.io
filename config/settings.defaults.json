@@ -1,0 +1,11 @@
+{ 
+  "production": {
+    "url": "mess.io",
+    "port": 5001,
+    "socketIOPort": 5002
+  },
+  "defaults": {
+    "port": 3000,
+    "socketIOPort": 5002
+  }
+}

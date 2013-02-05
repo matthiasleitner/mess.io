@@ -1,23 +1,43 @@
+_ = require("underscore")
 class ResourceController
-  
-  @index: (req, res) ->
-    Application.all (err, apps)->
-      if err
-        res.json 500, 
-          error: err
-      else
-        res.json (
-          applications: apps
-        )
+  hierarchy = ["application", "user", "device", "message"]
+  constructor: (@klass) ->
+    @name = klass.name.toLowerCase()
 
-  @new: (req, res) ->
+  index: (req, res) =>
+    params = req.params
+    assocName = "#{@name}s"
+
+    # is nestest resource
+    if _.keys(req.params).length > 1
+
+      # find last step in hierarchy chain
+      last_step = null
+      for step in hierarchy
+        if _.contains(_.keys(req.params), step)
+          last_step = step
+        
+      # find instance
+      @_require(last_step).find params[last_step], (err, obj) =>
+        # get all objects for association
+        obj[assocName] (err, objs) =>
+          resp = {}
+          resp[assocName] = objs
+          res.json resp
+
+    # root resource
+    else
+      @_require(@name).all (err, objs) =>
+        resp = {}
+        resp[assocName] = objs
+        res.json resp
+
+  new: (req, res) ->
     res.send "new user"
     
-  @create: (req, res) ->
-
-    app = new Application(req.query)
-
-    app.save (err, app) ->
+  create: (req, res) ->
+    obj = new @klass(req.query)
+    obj.save (err, app) ->
       if err
         res.json 500, 
           error: err
@@ -26,27 +46,67 @@ class ResourceController
           application: app
         )
 
-  @show: (req, res) ->
-    Application.find req.params.application, (err, app) ->
-      if app
-        res.json 200, (
-          application: app
-        )
+  show: (req, res) =>
+    @_findObject req, (err, obj) =>
+      if obj
+        res.format
+          html: =>
+            options = 
+              title: "#{@name} #{obj.id} show"
+              object: obj
+            @_renderView res, "show", options
+            
+          json: =>
+            data = {}
+            data[@name] = obj
+            res.json 200, data
+      else
+        res.json 404
+
+  edit: (req, res) ->
+    @_findObject req, (err, obj) =>
+      if obj
+        options = 
+          title: "#{klass.name} #{obj.id} edit"
+        @_renderView res, "edit", options        
+      else 
+        res.json 500
+    
+  update: (req, res) ->
+    res.send "update user " + req.params.user
+
+  destroy: (req, res) =>
+    console.log req.params
+    
+    @klass.find req.params[@name], (err, obj) ->
+      if obj
+        obj.delete (err, obj) ->
+          if obj
+            res.json 200, delete: true
+          else
+            res.json 500, err
 
       else
         res.json 500, err
 
-  @edit = (req, res) ->
-    res.send "edit user " + req.params.user
+  _renderView: (res, action, options) ->
+    options[@name] = @obj
+    res.render "#{@name}/#{action}", options
 
-  @update: (req, res) ->
-    res.send "update user " + req.params.user
+  _findObject: (req, cb) ->
+    if @obj == undefined
+      @klass.find req.params[@name], (err, obj) =>
+        cb(err, obj)
+        @obj = obj if obj
+    else
+      cb(null, @obj)
 
-  @destroy: (req, res) ->
-    User.find req.params.user, (err, user) ->
-      res.send "delete user " + user.delete (err, reps) ->
-        console.log err
-        console.log reps
+  _require: (model) ->
+    require("../models/#{model}")
+
+      
+
+module.exports = ResourceController
       
 
 

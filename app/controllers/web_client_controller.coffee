@@ -1,6 +1,7 @@
 class WebClientController
-  constructor: (app) ->
-    app.get "/", (req, res) ->
-      res.render("index", { title: "web client" })
+  constructor: (app, io) ->
+    app.get "/", (req, res) =>
+      res.render("index", { title: "mess.io | unified push", socket: io.sockets.sockets})
 
 module.exports = WebClientController
+

@@ -1,5 +1,5 @@
 {
-  "name" : "pns",
+  "name" : "mess.io",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,12 +11,13 @@
     "nconf"           : "0.6.5",
     "express"         : "*",
     "express-resource": "*",
+    "cookie"          : "*",
     "connect-redis"   : "*",
     "socket.io"       : "*",
     "underscore"      : "*",
     "hiredis"         : "*",
     "redis"           : "*",
-    "apn"             : "*",
+    "apns"            : "*",
     "node-gcm"        : "*",
     "mpns"            : "*",
     "wns"             : "*",
@@ -24,6 +25,8 @@
     "jade"            : "*",
     "bases"           : "*",
     "inflection"      : "*",
-    "benchmark"       : "*"
+    "benchmark"       : "*",
+    "cli-color"       : "*",
+    "pkginfo"         : "*"
   }
 }

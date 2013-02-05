@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+  .container
+
+    .navbar-wrapper
+          .container
+            .navbar.navbar-inverse
+              .navbar-inner
+                a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                  span.icon-bar
+                  span.icon-bar
+                  span.icon-bar
+                a.brand(href='#') mess.io
+                .nav-collapse.collapse
+                  ul.nav
+                    li.active
+                      a(href='#') Home
+                    li
+                      a(href='#about') About
+                    li
+                      a(href='#contact') Contact
+                    li.dropdown
+                      a.dropdown-toggle(href='#', data-toggle='dropdown')
+                        | Dropdown
+                        b.caret
+                      ul.dropdown-menu
+                        li
+                          a(href='#') Action
+                        li
+                          a(href='#') Another action
+                        li
+                          a(href='#') Something else here
+                        li.divider
+                        li.nav-header Nav header
+                        li
+                          a(href='#') Separated link
+                        li
+                          a(href='#') One more separated link
+
+
+
+    h1
+      = title
+
+    form(action='/applications',method='post', enctype='multipart/form-data')
+      fieldset
+        legend Information
+        label(for='name') Name
+        input(id='name', type='text', value='', placeholder='Name', name='name')
+      fieldset
+        legend GCM
+      fieldset
+        legend APNs 
+        .row
+          .span2
+            label(for='apns_key') APNs key
+            input(type="file", name="apns_key")
+          .span2
+            label(for='apns_cert') APNs certificate
+            input(type="file", name="apns_cert")
+      fieldset
+        button(type='submit', class='btn') Save
+  

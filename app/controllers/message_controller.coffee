@@ -1,35 +1,34 @@
 Message = require("../models/message")
+User = require("../models/user")
+ResourceController = require("./resource_controller")
 
-exports.index = (req, res) ->
-  res.send "message index"
+class MessageController extends ResourceController
+  constructor: ->
+    super(Message)
 
-exports.new = (req, res) ->
-  res.send "new message"
-  
-exports.create = (req, res) ->
-  
-  a = new Message(
-    name: req.query.name
-    applicationId: req.params.application
-    userId: req.params.user
-    payload: req.query.payload
-    scheduledFor: req.query.scheduledFor
-  )
-  
-  a.save (err, reply) ->
-    res.send reply  
+  create: (req, res) ->
+
+    params = req.params
+    console.log req.body
+    if req.param("text")
+
+      User.find params.user, (err, user) =>
+        console.log err
+        console.log params.user
+        if user
+          a = new Message(
+            text: req.param("text")
+            applicationId: req.params.application
+            userId: user.id
+            payload: req.param("payload")
+            scheduledFor: req.param("scheduledFor")
+          )
+          
+          a.save (err, reply) ->
+            res.send reply
+        else
+          res.send "user not found"
+    else 
+      res.send "not text given"
     
-  
-
-exports.show = (req, res) ->
-  res.send "show message " + req.params.message + " " + req.params.user
-
-exports.edit = (req, res) ->
-  res.send "edit message " + req.params.message
-
-exports.update = (req, res) ->
-  res.send "update message " + req.params.message
-
-exports.destroy = (req, res) ->
-  res.send "destroy message " + req.params.message
-
+module.exports = MessageController

@@ -1,58 +1,53 @@
+ResourceController = require("./resource_controller")
 Application = require("../models/application")
 
-exports.index = (req, res) ->
-  Application.all (err, apps)->
-    if err
-      res.json 500, 
-        error: err
-    else
-      res.json (
-        applications: apps
-      )
+class ApplicationController extends ResourceController
+  constructor: ->
+    super(Application)
 
-exports.new = (req, res) ->
-  res.send "new user"
+  new: (req, res) ->
+    res.render "application/new", 
+      title: "Create application"
   
-exports.create = (req, res) ->
-
-  app = new Application(req.query)
-
-  app.save (err, app) ->
-    if err
-      res.json 500, 
-        error: err
-    else
-      res.json 200, (
-        application: app
-      )
-
-exports.show = (req, res) ->
-  Application.find req.params.application, (err, app) ->
-    if app
-
-      app.users (err, users) ->
-
-        
-        res.json 200, (
-          application: app
-          users: users
-        )
-
-    else
-      res.json 500, err
-
-exports.edit = (req, res) ->
-  res.send "edit user " + req.params.user
-
-exports.update = (req, res) ->
-  res.send "update user " + req.params.user
-
-exports.destroy = (req, res) ->
-  User.find req.params.user, (err, user) ->
-    res.send "delete user " + user.delete (err, reps) ->
-      console.log err
-      console.log reps
+  create: (req, res) ->
+    req.body.apnsCert = req.files.apns_cert.path if req.files.apns_cert.size > 0
+    req.body.apnsKey  = req.files.apns_key.path if req.files.apns_key.size > 0
     
+    console.log req.body
+    console.log req.query
+    console.log req.files
+
+    app = new Application(req.body)
+
+    app.save (err, app) ->
+      if err
+        res.json 500, 
+          error: err
+      else
+        res.format
+          html: ->
+            res.redirect("/applications/#{app.id}")
+          json: ->
+            res.json 200,
+              application: app
+            
+  show: (req, res) ->
+    Application.find req.params.application, (err, app) ->
+      if app
+        res.format
+          html: ->
+            res.render "application/show"
+              title: "Application #{app.id}"
+              app: app
+          json: ->
+            res.json 200, 
+              application: app
+
+      else
+        res.json 500, err
+
+
+module.exports = ApplicationController
   
   
 

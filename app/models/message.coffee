@@ -1,6 +1,4 @@
 RedisObject   = require("./redis_object")
-MessageWorker = require("../workers/message_worker")
-
 
 class Message extends RedisObject
 
@@ -10,8 +8,9 @@ class Message extends RedisObject
     if @id 
       super cb
     else
+      # after message is saved enqueue it for dispatch
       super (err, message) =>
-        MessageWorker.enqueue(@obj, cb)    
+        require("../workers/message_worker").enqueue(@id, cb)    
      
 
 module.exports = Message

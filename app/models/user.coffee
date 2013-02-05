@@ -3,12 +3,9 @@ RedisObject = require("./redis_object")
 
 class User extends RedisObject
 
-  @hasMany:   ["messages", "devices"]
-  @belongsTo: ["application"]
-  
-  # addDevice: (device, cb) ->
-  #   super.client.SADD "devices_for_user|#{@id}", device.id, cb
-
+  @hasMany:    ["messages", "devices"]
+  @belongsTo:  ["application"]
+  @lookUpBy:   ["key"]
+  @hasUniqKey: true
 
 module.exports = User
-console.log module.exports

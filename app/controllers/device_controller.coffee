@@ -1,22 +1,29 @@
-exports.index = (req, res) ->
-  req.params.user
-  res.send "device index"
+Device = require("../models/device")
+ResourceController = require("./resource_controller")
 
-exports.new = (req, res) ->
-  res.send "new device"
+
+class DeviceController extends ResourceController
+  constructor: ->
+    super(Device)
+
+  new: (req, res) ->
+    res.render "device/new", 
+      title: "Create device"
+      user: req.params.user
+      application: req.params.application
   
-exports.create = (req, res) ->
-  res.send "create device"
+  create: (req, res) ->
+    body = req.body
 
-exports.show = (req, res) ->
-  res.send "show device " + req.params.device
+    device = new Device
+      name: req.body.name
+      applicationId: req.params.application
+      userId: req.params.user
+      apnsToken: body.apns_token
+      gcmToken: body.gcm_token
+    
+    device.save (err, device) ->
+      res.json 200, device  
 
-exports.edit = (req, res) ->
-  res.send "edit device " + req.params.device
-
-exports.update = (req, res) ->
-  res.send "update device " + req.params.device
-
-exports.destroy = (req, res) ->
-  res.send "destroy device " + req.params.device
+module.exports = DeviceController
 

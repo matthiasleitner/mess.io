@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+  .container
+    h2
+      ="JSON"
+    code(class="prettyprint lang-java-script")
+      p= JSON.stringify(object.toJSON(), null, 2)

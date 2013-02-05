@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+  .container
+
+    .navbar-wrapper
+          .container
+            .navbar.navbar-inverse
+              .navbar-inner
+                a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                  span.icon-bar
+                  span.icon-bar
+                  span.icon-bar
+                a.brand(href='#') mess.io
+                .nav-collapse.collapse
+                  ul.nav
+                    li.active
+                      a(href='#') Home
+                    li
+                      a(href='#about') About
+                    li
+                      a(href='#contact') Contact
+                    li.dropdown
+                      a.dropdown-toggle(href='#', data-toggle='dropdown')
+                        | Dropdown
+                        b.caret
+                      ul.dropdown-menu
+                        li
+                          a(href='#') Action
+                        li
+                          a(href='#') Another action
+                        li
+                          a(href='#') Something else here
+                        li.divider
+                        li.nav-header Nav header
+                        li
+                          a(href='#') Separated link
+                        li
+                          a(href='#') One more separated link
+
+
+
+    h1
+      = "Create new Device"
+
+    form(action='/applications/1/users/1/devices',method='post', enctype='multipart/form-data')
+      input(type="hidden", name="apns_key", value= user)
+      input(type="hidden", name="apns_key", value= application)
+      fieldset
+        legend Information
+        label(for='name') Name
+        input(id='name', type='text', value='', placeholder='Name', name='name')
+      fieldset
+        legend GCM
+        label(for='apns_key') GCM registration Id
+        input(type="text", name="gcm_token")
+      fieldset
+        legend APNs
+        label(for='apns_key') APNs device token
+        input(type="text", name="apns_token")
+          
+      fieldset
+        button(type='submit', class='btn') Save
+  

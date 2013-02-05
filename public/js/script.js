@@ -1,35 +1,28 @@
-var socket = io.connect('http://localhost:3000', { secure: true});
+socketIOHost = "http://"+document.domain+":5002"
+console.log(socketIOHost)
+push = new Push(socketIOHost);
 
-socket.emit('pause', {});
-
-socket.on('news', function () {
-  news.emit('woot');
-});
-
-socket.on('spwanConnection', function (data){
+$(document).ready(function(){
+  //jquery ready
 
 
-});
+  push.register(null);
+  $("#url").text(document.URL)
+})
 
-socket.on('socketList', function (data){
+// push.socket.on('connect', function () {
+//         console.log("connect");
+//           push.spwanConnection()
+          
+//         });
 
-	console.log(data);
+push.on("message", function(data){console.log("test: "+ data)})
 
-});
+push.on("userKey", function(data){
+  $("#user_id").text(data)
+  $("#demo").fadeIn(250)
+})
+
+push.socket.on("connection_count", function(data){ $(".clients").text(data)});
 
 
-
-socket.on('message', function (msg) {
-  alert(msg)
-  socket.emit('akn')
-});
-
-function registerDevice(){
-  socket.emit('register', { "test": "value--"})
-}
-
-function requestSocketList(){
-	socket.emit('socketList', function (data) {
-  		console.log(data); // data will be 'woot'
-	});
-}
