@@ -1,22 +1,24 @@
 socketIOHost = "http://"+document.domain+":5002"
-console.log(socketIOHost)
 push = new Push(socketIOHost);
 
 $(document).ready(function(){
   //jquery ready
 
-
+  //register device at server
   push.register(null);
+
+  //dynamically display document url for demo
   $("#url").text(document.URL)
 })
 
 // push.socket.on('connect', function () {
-//         console.log("connect");
-//           push.spwanConnection()
-          
-//         });
+//  push.spwanConnection()        
+//});
 
-push.on("message", function(data){console.log("test: "+ data)})
+push.on("message", function(data){
+  console.log("received message: "+ data);
+  alert(data)
+})
 
 push.on("userKey", function(data){
   $("#user_id").text(data)

@@ -7,22 +7,18 @@ class MessageController extends ResourceController
     super(Message)
 
   create: (req, res) ->
-
     params = req.params
-    console.log req.body
+    
     if req.param("text")
 
       User.find params.user, (err, user) =>
-        console.log err
-        console.log params.user
         if user
-          a = new Message(
+          a = new Message
             text: req.param("text")
             applicationId: req.params.application
             userId: user.id
-            payload: req.param("payload")
+            payload: req.body("payload") #json payload
             scheduledFor: req.param("scheduledFor")
-          )
           
           a.save (err, reply) ->
             res.send reply

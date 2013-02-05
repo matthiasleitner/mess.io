@@ -1,7 +1,6 @@
 Device = require("../models/device")
 ResourceController = require("./resource_controller")
 
-
 class DeviceController extends ResourceController
   constructor: ->
     super(Device)
@@ -14,16 +13,15 @@ class DeviceController extends ResourceController
   
   create: (req, res) ->
     body = req.body
-
-    device = new Device
+    device_data =
       name: req.body.name
       applicationId: req.params.application
       userId: req.params.user
       apnsToken: body.apns_token
       gcmToken: body.gcm_token
-    
-    device.save (err, device) ->
-      res.json 200, device  
+
+    Device.create device_data, (err, device) ->
+      res.json 200, device
 
 module.exports = DeviceController
 

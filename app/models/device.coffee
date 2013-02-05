@@ -7,6 +7,9 @@ class Device extends RedisObject
   @hasUniqKey: true
 
 
+  # Returns a list of supported channels
+  #
+  #
   supportedChannels: ->
     channels = []
     channels.push "apns"        if @get "apnsToken"
@@ -20,6 +23,9 @@ class Device extends RedisObject
   supportsChannelCount: ->
     @supportedChannels().length
 
+  # Remove channel with given name by removinf its key
+  #
+  #
   removeChannel: (channel) ->
     if @supportsChannelCount() > 1
       @set "#{channel}Token", null
@@ -28,6 +34,9 @@ class Device extends RedisObject
       @delete (err, reply) ->
         console.log "removed device with no associated channels"
 
+  # Create a new device and create user if it does not exist
+  #
+  #
   @create: (obj, cb) ->
     user = 
       id: obj.userId

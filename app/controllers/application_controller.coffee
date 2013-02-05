@@ -4,10 +4,6 @@ Application = require("../models/application")
 class ApplicationController extends ResourceController
   constructor: ->
     super(Application)
-
-  new: (req, res) ->
-    res.render "application/new", 
-      title: "Create application"
   
   create: (req, res) ->
     req.body.apnsCert = req.files.apns_cert.path if req.files.apns_cert.size > 0

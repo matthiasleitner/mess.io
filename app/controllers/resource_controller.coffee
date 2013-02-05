@@ -4,6 +4,9 @@ class ResourceController
   constructor: (@klass) ->
     @name = klass.name.toLowerCase()
 
+  # universial index request handler
+  #
+  #
   index: (req, res) =>
     params = req.params
     assocName = "#{@name}s"
@@ -32,8 +35,12 @@ class ResourceController
         resp[assocName] = objs
         res.json resp
 
-  new: (req, res) ->
-    res.send "new user"
+  # Route new requests to create view
+  #
+  new: (req, res) =>
+    options = 
+      title: "Create #{@name}"
+    @_renderView res, "new", options  
     
   create: (req, res) ->
     obj = new @klass(req.query)
@@ -89,10 +96,12 @@ class ResourceController
       else
         res.json 500, err
 
+  # helper for rendering views
   _renderView: (res, action, options) ->
     options[@name] = @obj
     res.render "#{@name}/#{action}", options
 
+  # object finder
   _findObject: (req, cb) ->
     if @obj == undefined
       @klass.find req.params[@name], (err, obj) =>
@@ -101,6 +110,7 @@ class ResourceController
     else
       cb(null, @obj)
 
+  # helper for requiring model
   _require: (model) ->
     require("../models/#{model}")
 

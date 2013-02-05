@@ -2,8 +2,9 @@ root = exports ? this
 class root.Push extends EventEmitter
 
   constructor: (@host) ->
+    # array holding all active connections
     @connections = []
-    console.log @host
+    
     @socket = io.connect @host,
       secure: false
     @bindEvents()
@@ -12,7 +13,6 @@ class root.Push extends EventEmitter
     @socket.emit "register",
       userId: userId
       browserFingerprint: $.fingerprint()
-      test: "value--"
 
   clientList: (cb) ->
     @socket.emit "socketList", cb
@@ -49,12 +49,12 @@ class root.Push extends EventEmitter
       console.log data
 
     @socket.on "message", (msg) =>
-      alert msg
       @socket.emit "akn"
       @emit "message",msg
 
   spwanConnections: (count) ->
     for num in [1..count]
+      # spwan new connection every 100 ms
       window.setTimeout(=>
         sock = io.connect @host,
           'force new connection': true
@@ -62,6 +62,7 @@ class root.Push extends EventEmitter
           $(".clients").text(data)
         @connections.push sock
       , num*100)
+
   spwanConnection: ->
     @connections.push io.connect @host,
       'force new connection': true

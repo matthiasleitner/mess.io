@@ -13,7 +13,6 @@
     function Push(host) {
       this.host = host;
       this.connections = [];
-      console.log(this.host);
       this.socket = io.connect(this.host, {
         secure: false
       });
@@ -23,8 +22,7 @@
     Push.prototype.register = function(userId) {
       return this.socket.emit("register", {
         userId: userId,
-        browserFingerprint: $.fingerprint(),
-        test: "value--"
+        browserFingerprint: $.fingerprint()
       });
     };
 
@@ -76,7 +74,6 @@
         return console.log(data);
       });
       return this.socket.on("message", function(msg) {
-        alert(msg);
         _this.socket.emit("akn");
         return _this.emit("message", msg);
       });
