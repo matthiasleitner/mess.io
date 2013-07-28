@@ -66,11 +66,14 @@ class MessageWorker
       if message
         # load user for message
         message.user (err, user)  =>
+
           console.log "loaded message user %j", user
           message.application (err, application) =>
+
             console.log "loaded message application %j", application
             # get all devices of user
             user.devices (err, devices) =>
+
               console.log "loaded message devices %j", devices
               # serve all devices of user
               for device in devices
