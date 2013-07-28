@@ -6,7 +6,7 @@
 
 
 (function() {
-  var AccessLog, DeviceController, MessageController, MessageWorker, RedisStore, Resource, ServerLog, SocketController, SocketRedisStore, User, UserController, WebClientController, app, applications, bunyan, cluster, coffeeScript, config, cookie, deviceController, devices, express, fs, http, https, io, kue, log, messageController, messageWorker, messages, path, pub, redis, redisPassword, server, sessionStore, socketController, socketio, store, sub, userController, users, webClientController;
+  var AccessLog, ChannelController, DeviceController, MessageController, MessageWorker, RedisRecord, RedisStore, Resource, ServerLog, SocketController, SocketRedisStore, User, UserController, WebClientController, app, applications, bunyan, channelController, channels, cluster, coffeeScript, config, cookie, deviceController, devices, express, fs, http, https, io, kue, log, messageController, messageWorker, messages, path, pub, redis, redisPassword, server, sessionStore, socketController, socketio, store, sub, userController, users, webClientController;
 
   path = require('path');
 
@@ -38,6 +38,8 @@
 
   Resource = require('express-resource');
 
+  RedisRecord = require('redis-record');
+
   User = require('./app/models/user');
 
   MessageWorker = require('./app/workers/message_worker');
@@ -52,6 +54,10 @@
     Catch exceptions
   */
 
+
+  RedisRecord.setModelLoadPath("app/models");
+
+  RedisRecord.setNamespace("mess_io");
 
   /*
    Logging
@@ -186,11 +192,15 @@
 
   MessageController = require('./app/controllers/message_controller');
 
+  ChannelController = require('./app/controllers/channel_controller');
+
   userController = new UserController;
 
   deviceController = new DeviceController;
 
   messageController = new MessageController;
+
+  channelController = new ChannelController;
 
   applications = app.resource('applications', new (require('./app/controllers/application_controller')));
 
@@ -200,13 +210,21 @@
 
   devices = app.resource('devices', deviceController);
 
+  channels = app.resource('channels', channelController);
+
   applications.add(users);
 
   applications.add(devices);
 
+  applications.add(channels);
+
   users.add(messages);
 
-  users.add(devices);
+  users.add(app.resource('devices', deviceController));
+
+  channels.add(app.resource('messages', messageController));
+
+  channels.add(app.resource('devices', deviceController));
 
   users = app.resource('users', userController);
 

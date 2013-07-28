@@ -5,17 +5,40 @@ html
     link(rel='stylesheet', href='/css/bootstrap.min.css')
     link(rel='stylesheet', href='/css/style.css')
   body
+    a(href='https://github.com/matthiasleitner/mess.io')
+    img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png', alt='Fork me on GitHub')
+    .container.header
+      .row
+        .span8
+          .logo
+          h1.page_name
+            = "mess.io"
+
+          h2.page_description
+            = "service for unified push messaging"
+        .span2
+          .account
+            if typeof(loggedIn) !== 'undefined' && loggedIn
+              a(href="profile")
+                = "Your profile"
+              = " | "
+              a(href="logout")
+                = "Logout"
+            else
+              a(data-target="#login-modal", data-toggle="modal")
+                = "Login"
     block content
     block scripts
       script(src='//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js')
-      script(src='http://localhost:5002/socket.io/socket.io.js')
+      script(src='/js/test.js')
       script(src='/js/bootstrap.min.js')
       script(src='/js/md5.js')
       script(src='/js/jquery.browser-fingerprint-1.1.min.js')
       script(src='/js/event.js')
-      script(src='/js/push.js')
+      script(src='/js/mess.js')
       script(src='/js/script.js')
 
-      
-    
+
+
+
 

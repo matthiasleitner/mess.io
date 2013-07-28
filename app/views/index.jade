@@ -1,23 +1,14 @@
 extends layout
 
 block content
-  a(href='https://github.com/matthiasleitner/mess.io')
-    img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png', alt='Fork me on GitHub')
-  .container
-    .logo
-    h1.page_name
-      = "mess.io"
-
-    h2.page_description
-      = "service for unified push messaging"
   .container
     .row
-      .span10
+      .span5
         h3
           = "About"
         p
           strong="mess.io"
-          =" is an open source solution for handling real-time notifications" 
+          =" is an open source solution for handling real-time notifications"
           br
           ="for browsers, iOS and Android clients built on "
           strong="node.js "
@@ -25,6 +16,16 @@ block content
           strong="Redis"
           =" written in "
           strong="CoffeeScript."
+      .span4.offset1
+        button.btn.btn-info.btn-large.signup(data-toggle="modal", data-target="#signup-modal")
+          ="Signup"
+        p
+          | Signup for your
+          strong
+            = " free "
+          | app ID and start using mess.io today.
+    .row
+      .span10
         #demo.hide
           h3
             = "Try it now"
@@ -34,13 +35,12 @@ block content
             ol.linenums
               li.L0
                 span.tag
-                  ='curl -H "Content-Type: application/json" -X POST '
+                  ="curl -X POST -d 'text=Hello World' "
                 span.tag
-                  ='"'
                   span#url
                   ='applications/1/users/'
                   span#user_id
-                  ='/messages?text=hello%20world"'
+                  ='/messages'
           .span5
             .badge.badge-info.clients
             h3.left
@@ -53,8 +53,60 @@ block content
     .container
       .row
         footer
-          
-          ="mess.io by Matthias Leitner. Released under the MIT license -  © 2013 smartcode.at"
-           
-            
+          = "mess.io by "
+          a(href="http://matthiasleitner.com")
+            = "Matthias Leitner"
+          = " Released under the MIT license -  © 2013"
+          a(href="http://smartcode.at")
+            = " smartcode.at"
+
+  #signup-modal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+      h3#signup-modalLabel Sign up for mess.io
+    #signup-modal-alert
+    form#signup-form.form-horizontal
+      .modal-body
+        .control-group
+          label.control-label(for='inputEmail') Full name
+          .controls
+            input#signupName(type='text required', placeholder='Full name')
+        .control-group
+          label.control-label(for='inputEmail') Email
+          .controls
+            input#signupEmail(type='email', placeholder='Email')
+        .control-group
+          label.control-label(for='inputPassword') Password
+          .controls
+            input#signupPassword(type='password', placeholder='Password')
+        .control-group
+          label.control-label(for='inputPassword') Confirm password
+          .controls
+            input#signupPasswordConfirmation(type='password', placeholder='Confirm password')
+      .modal-footer
+        button#signup-button.btn.btn-info Sign up
+  #login-modal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+      h3#login-modalLabel Login
+    #login-modal-alert
+    form.form-horizontal
+      .modal-body
+        .control-group
+          label.control-label(for='inputEmail') Email
+          .controls
+            input#loginEmail(type='text', placeholder='Email')
+        .control-group
+          label.control-label(for='inputPassword') Password
+          .controls
+            input#loginPassword(type='password', placeholder='Password')
+
+        .controls
+          label.checkbox
+            input(type='checkbox')
+            | Remember me
+      .modal-footer
+        button#login-button.btn.btn-info Sign in
+
+
 

@@ -3,17 +3,15 @@ extends ../layout
 block content
   .container
 
-    .navbar-wrapper
-          .container
-            .navbar.navbar-inverse
-              .navbar-inner
-                a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-                  span.icon-bar
-                  span.icon-bar
-                  span.icon-bar
-                a.brand(href='#') mess.io
-
-
+    //- .navbar-wrapper
+    //-       .container
+    //-         .navbar.navbar-inverse
+    //-           .navbar-inner
+    //-             a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+    //-               span.icon-bar
+    //-               span.icon-bar
+    //-               span.icon-bar
+    //-             a.brand(href='#') mess.io
 
     h1
       = "Application "
@@ -29,4 +27,3 @@ block content
       p= JSON.stringify(app.toJSON(), null, 2)
 
 
-  

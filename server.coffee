@@ -18,7 +18,7 @@ SocketRedisStore    = require("socket.io/lib/stores/redis")
 SocketController    = require('./app/controllers/socket_controller')
 WebClientController = require('./app/controllers/web_client_controller')
 Resource            = require('express-resource')
-
+RedisRecord         = require('redis-record')
 User                = require('./app/models/user')
 MessageWorker       = require('./app/workers/message_worker')
 kue                 = require('kue')
@@ -31,6 +31,8 @@ cluster             = require("cluster")
 #process.on "uncaughtException", (exception) ->
 #  console.log exception
 
+RedisRecord.setModelLoadPath("app/models")
+RedisRecord.setNamespace("mess_io")
 
 ###
  Logging
@@ -68,7 +70,7 @@ app.configure ->
   app.use express.cookieParser()
   app.use express.session
     secret: process.env.CLIENT_SECRET or "super secret string"
-    maxAge : new Date Date.now() + 7200000 # 2h Session lifetime
+    maxAge: new Date Date.now() + 7200000 # 2h Session lifetime
     store: new RedisStore {client: sessionStore}
   app.use '/js', express.static(path.join(__dirname,'/public/js'))
   app.use '/css', express.static(path.join(__dirname, '/public/css'))
@@ -76,7 +78,7 @@ app.configure ->
   app.set "views", path.join(__dirname, "app/views")
   app.use express.favicon()
   app.use express.logger("dev")
-  
+
 
 ###
  Start listening to port
@@ -101,6 +103,8 @@ server = http.createServer(app).listen app.get("port"), ->
 io = socketio.listen(config.socketIOPort)
 io.set "log level",3
 # io.disable('heartbeats')
+
+
 # init redis clients for socket.io store
 pub   = redis.createClient()
 sub   = redis.createClient()
@@ -130,12 +134,12 @@ store.auth redisPassword, (err) ->
 io.configure ->
 
   # send minified client
-  io.enable "browser client minification" 
+  io.enable "browser client minification"
   # apply etag caching logic based on version number
   io.enable "browser client etag"
   # gzip the javascript client
   io.enable "browser client gzip"
-  
+
   # reduce logging
   # 0 - error
   # 1 - warn
@@ -169,7 +173,7 @@ io.configure ->
     #         callback null, true
     #   else
     #     callback "No cookie", false
-  
+
 
 ###
  Server routes
@@ -179,24 +183,32 @@ io.configure ->
 UserController = require('./app/controllers/user_controller')
 DeviceController = require('./app/controllers/device_controller')
 MessageController = require('./app/controllers/message_controller')
+ChannelController = require('./app/controllers/channel_controller')
+
 userController = new UserController
 deviceController = new DeviceController
 messageController = new MessageController
+channelController = new ChannelController
 
 applications = app.resource 'applications', new (require('./app/controllers/application_controller'))
 users        = app.resource 'users', userController
 messages     = app.resource 'messages', messageController
 devices      = app.resource 'devices', deviceController
+channels     = app.resource 'channels', channelController
 
 
 # nest controllers
 applications.add users
 applications.add devices
+applications.add channels
+
 users.add messages
-users.add devices
+users.add app.resource 'devices', deviceController
 
-# add users as standalone resource
+channels.add app.resource 'messages', messageController
+channels.add app.resource 'devices', deviceController
 
+# add users, devices and messages as standalone resource
 users        = app.resource 'users', userController
 devices      = app.resource 'devices', deviceController
 messages     = app.resource 'messages', messageController

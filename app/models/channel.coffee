@@ -1,6 +1,8 @@
-RedisObject = require("./redis_object")
+RedisRecord = require("redis-record")
 
-class Channel extends RedisObject
-	belongsTo: ["application"]
-  
+class Channel extends RedisRecord
+
+  @belongsTo: ["application"]
+  @hasMany: ["messages", "devices", "users"]
+
 module.exports = Channel

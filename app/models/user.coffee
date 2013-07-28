@@ -1,14 +1,14 @@
-redis = require("redis")
-RedisObject = require("./redis_object")
+RedisRecord = require("redis-record")
 
 # User model representing a user who has devices registered at the service
 #
 #
-class User extends RedisObject
-
+class User extends RedisRecord
   @hasMany:    ["messages", "devices"]
-  @belongsTo:  ["application"]
+  @belongsTo:  ["application", "channel"]
   @lookUpBy:   ["key"]
   @hasUniqKey: true
+  # limit key length which is only used for demo by now
+  @uniqKeyLength: 12
 
 module.exports = User

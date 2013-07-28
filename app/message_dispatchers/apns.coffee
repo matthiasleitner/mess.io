@@ -4,35 +4,33 @@ apns = require('apns')
 #
 #
 class APNSDispatcher
-
   #
   # TODO: load proper cert and key for given device
   #
-  options =
-    certFile: "cert.pem"
-    keyFile: "key.pem"
-    gateway: "gateway.sandbox.push.apple.com"
+  constructor: (@app, @device, @expiry = 3600) ->
+    @options =
+      certFile: @app.get("apnsCert")
+      keyFile: @app.get("apnsKey")
+      gateway: "gateway.sandbox.push.apple.com" # change this to non sandbox for production
 
+    @token = @device.get("apnsToken") #"6ee7b0493efd3157815eab98ab14b479be1f1c14b24e5f8bb64565eca688b719"
 
-  constructor: (@device, @expiry = 3600) ->
-    @token = device.apnsToken #"6ee7b0493efd3157815eab98ab14b479be1f1c14b24e5f8bb64565eca688b719" 
-    
   dispatch: (@message) ->
-    console.log "APNS dispatch ################################################"
-    
-    apnsConnection = new apns.Connection(options)
+
+    apnsConnection = new apns.Connection(@options)
     apnsDevice = new apns.Device(@token)
-    note = new apns.Notification()
+    notification = new apns.Notification()
 
     # set expiry from instance variable
-    note.expiry = Math.floor(Date.now() / 1000) + @expiry 
-    note.badge = 5
-    note.alert = @message.get("text")
-    note.payload = 
-      test: @message.get("payload")
-    note.device = apnsDevice
-  
-    console.log note
-    apnsConnection.sendNotification note
+    notification.expiry = Math.floor(Date.now() / 1000) + @expiry
+    notification.badge = 5
+
+    # set text and payload
+    notification.alert = @message.get("text")
+    notification.payload = @message.get("payload")
+    notification.device = apnsDevice
+
+    console.log notification
+    apnsConnection.sendNotification notification
 
 module.exports = APNSDispatcher

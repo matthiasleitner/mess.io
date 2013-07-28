@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server"
+    "start": "node server.js"
   },
   "dependencies": {
     "bunyan"          : "0.16.4",
@@ -27,6 +27,9 @@
     "inflection"      : "*",
     "benchmark"       : "*",
     "cli-color"       : "*",
-    "pkginfo"         : "*"
+    "pkginfo"         : "*",
+    "redis-record"    : "*",
+    "bcrypt"          : "*",
+    "async"           : "*"
   }
 }

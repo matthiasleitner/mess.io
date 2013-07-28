@@ -1,10 +1,10 @@
-RedisObject = require("./redis_object")
+RedisRecord = require("redis-record")
 User = require("./user")
 
 # Device model representing a device which is connected to the service
 #
 #
-class Device extends RedisObject
+class Device extends RedisRecord
   @belongsTo: ["user", "application"]
   @lookUpBy: ["key", "webSocketToken"]
   @hasUniqKey: true
@@ -37,6 +37,7 @@ class Device extends RedisObject
   #
   removeChannel: (channel) ->
     if @supportsChannelCount() > 1
+      # remove token/id for channel
       @set "#{channel}Token", null
       @save()
     else
@@ -47,12 +48,11 @@ class Device extends RedisObject
   #
   #
   @create: (obj, cb) ->
-    user = 
+    user =
       id: obj.userId
       ip: obj.ip
     User.findOrCreate user, (err, reply) =>
       obj.userId = user.id unless obj.userId
-
       console.log this.name
       new this(obj).save(cb)
 

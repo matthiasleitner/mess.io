@@ -5,12 +5,13 @@ class DeviceController extends ResourceController
   constructor: ->
     super(Device)
 
+  # UI
   new: (req, res) ->
-    res.render "device/new", 
+    res.render "device/new",
       title: "Create device"
       user: req.params.user
       application: req.params.application
-  
+
   create: (req, res) ->
     body = req.body
     device_data =

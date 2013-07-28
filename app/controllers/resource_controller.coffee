@@ -21,9 +21,10 @@ class ResourceController
       # find last step in hierarchy chain
       last_step = null
       for step in hierarchy
+        console.log req.params
         if _.contains(_.keys(req.params), step)
           last_step = step
-        
+
       # find instance
       @_require(last_step).find params[last_step], (err, obj) =>
         # get all objects for association
@@ -42,15 +43,15 @@ class ResourceController
   # Route new requests to create view
   #
   new: (req, res) =>
-    options = 
+    options =
       title: "Create #{@name}"
-    @_renderView res, "new", options  
-    
+    @_renderView res, "new", options
+
   create: (req, res) ->
     obj = new @klass(req.query)
     obj.save (err, app) ->
       if err
-        res.json 500, 
+        res.json 500,
           error: err
       else
         res.json 200, (
@@ -62,11 +63,11 @@ class ResourceController
       if obj
         res.format
           html: =>
-            options = 
+            options =
               title: "#{@name} #{obj.id} show"
               object: obj
             @_renderView res, "show", options
-            
+
           json: =>
             data = {}
             data[@name] = obj
@@ -77,15 +78,15 @@ class ResourceController
   edit: (req, res) ->
     @_findObject req, (err, obj) =>
       if obj
-        options = 
+        options =
           title: "#{klass.name} #{obj.id} edit"
-        @_renderView res, "edit", options        
-      else 
+        @_renderView res, "edit", options
+      else
         res.json 500
-    
+
   destroy: (req, res) =>
     console.log req.params
-    
+
     @klass.find req.params[@name], (err, obj) ->
       if obj
         obj.delete (err, obj) ->
@@ -96,6 +97,10 @@ class ResourceController
 
       else
         res.json 500, err
+
+  #
+  # PRIVATE METHODS
+  #
 
   # helper for rendering views
   _renderView: (res, action, options) ->
@@ -115,10 +120,10 @@ class ResourceController
   _require: (model) ->
     require("../models/#{model}")
 
-      
+
 
 module.exports = ResourceController
-      
+
 
 
 
