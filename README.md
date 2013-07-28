@@ -5,6 +5,32 @@ mess.io
 Universal Push Messaging Service build on node.js supporting push based message delivery to multiple platforms
 
 
+# USAGE:
+
+# create an application which represents an app which should recieve messages (can be one for multiple platforms)
+
+REST /application
+
+Required properties:
+
+- name
+
+Optional properties:
+
+- apnsKey (path to file)
+- apnsCert
+
+or
+
+- gcmProjectId
+
+
+generated properties for authentication:
+
+- key
+- apiSecret
+
+
 ## LICENSE - "MIT License"
 
 Copyright (c) 2013 Matthias Leitner
