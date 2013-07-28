@@ -7,7 +7,7 @@ Universal Push Messaging Service build on node.js supporting push based message 
 
 # USAGE:
 
-# create an application which represents an app which should recieve messages (can be one for multiple platforms)
+create an application which represents an app which should recieve messages (can be one for multiple platforms)
 
 REST /application
 
