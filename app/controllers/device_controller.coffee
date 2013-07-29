@@ -15,7 +15,7 @@ class DeviceController extends ResourceController
   create: (req, res) ->
     body = req.body
     device_data =
-      name: req.body.name
+      name: body.name
       applicationId: req.params.application
       userId: req.params.user
       apnsToken: body.apns_token
